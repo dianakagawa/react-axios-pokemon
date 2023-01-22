@@ -1,6 +1,5 @@
-// fetch pokemon names from the api and display them in a list with a button that fetches the pokemon data
-
 import React, {useState} from "react";
+import axios from "axios";
 import {Button} from "react-bootstrap";
 import {ListGroup} from "react-bootstrap";
 
@@ -8,11 +7,11 @@ const FetchPokemon = () => {
   const [pokemon, setPokemon] = useState([]);
 
   const fetchPokemon = () => {
-    fetch("https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0")
-      .then((response) => response.json())
-      .then((data) => {
-        const pokemon = data.results.map((pokemon) => pokemon.name);
-        setPokemon(pokemon);
+    axios
+      .get("https://pokeapi.co/api/v2/pokemon?limit=807")
+      .then((response) => {
+        // console.log(response.data.results);
+        setPokemon(response.data.results);
       })
       .catch((error) => {
         console.log(error);
@@ -21,16 +20,14 @@ const FetchPokemon = () => {
 
   return (
     <div>
-      <Button className="my-3" variant="secondary" onClick={fetchPokemon}>
-        Fetch Pokemon
+      <Button className="my-3" onClick={fetchPokemon}>
+        Listar los Pokemon
       </Button>
-      {pokemon.map((pokemon, index) => {
-        return (
-          <ListGroup>
-            <ListGroup.Item key={index}>{pokemon}</ListGroup.Item>
-          </ListGroup>
-        );
-      })}
+      <ListGroup>
+        {pokemon.map((pokemon, index) => {
+          return <ListGroup.Item key={index}>{pokemon.name}</ListGroup.Item>;
+        })}
+      </ListGroup>
     </div>
   );
 };
